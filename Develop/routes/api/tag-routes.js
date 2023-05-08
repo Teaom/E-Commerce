@@ -4,8 +4,7 @@ const { Tag, Product, ProductTag } = require('../../models');
 // The `/api/tags` endpoint
 
 router.get('/', async (req, res) => {
-  // find all tags
-  // be sure to include its associated Product data
+  //all tags
   try {
     const tagData = await Tag.findAll({
       attributes: ['id', 'tag_name'],
@@ -24,8 +23,7 @@ router.get('/', async (req, res) => {
 
 
 router.get('/:id', async (req, res) => {
-  // find a single tag by its `id`
-  // be sure to include its associated Product data
+  //single tags
   try {
     const tagData = await Tag.findAll({
       where: {
@@ -39,6 +37,10 @@ router.get('/:id', async (req, res) => {
         }
       ]
     });
+    if (!productData) {
+      res.status(404).json({ message: 'There is no product with that ID!' })
+      return
+    }
     res.status(200).json(tagData);
   } catch (err) {
     res.status(500).json(err);
